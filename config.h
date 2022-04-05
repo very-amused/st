@@ -6,6 +6,7 @@
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
 static char *font = "Fira Code:size=12:antialias=true:autohint=true";
+static char *font2[] = { "Nerd Fonts Symbols:size=12:antialias=true:autohint=true" };
 static int borderpx = 10;
 
 /*
@@ -109,7 +110,7 @@ char *termname = "st-256color";
  *
  *	stty tabs
  */
-unsigned int tabspaces = 8;
+unsigned int tabspaces = 2;
 
 /* bg opacity */
 float alpha = 0.75;
