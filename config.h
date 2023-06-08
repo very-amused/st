@@ -5,8 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Fira Code:size=12:antialias=true:autohint=true";
-static char *font2[] = { "Nerd Fonts Symbols:size=12:antialias=true:autohint=true" };
+static char *font = "Fira Code Nerd Font Mono:size=12:antialias=true:autohint=true";
+static char *font2[] = {};
 static int borderpx = 10;
 
 /*
