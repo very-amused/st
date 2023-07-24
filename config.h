@@ -201,7 +201,7 @@ static uint forcemousemod = ShiftMask;
 /*
  * Xresources preferences to load at startup
  */
-ResourcePref resources[] = {
+static ResourcePref resources[] = {
 		{ "font",         STRING,  &font },
 		{ "color0",       STRING,  &colorname[0] },
 		{ "color1",       STRING,  &colorname[1] },
@@ -220,6 +220,24 @@ ResourcePref resources[] = {
 		{ "color14",      STRING,  &colorname[14] },
 		{ "color15",      STRING,  &colorname[15] },
 		{ "cursorColor",  STRING,  &colorname[258] },
+		{ "termname",     STRING,  &termname },
+		{ "shell",        STRING,  &shell },
+		{ "minlatency",   INTEGER, &minlatency },
+		{ "maxlatency",   INTEGER, &maxlatency },
+		{ "blinktimeout", INTEGER, &blinktimeout },
+		{ "bellvolume",   INTEGER, &bellvolume },
+		{ "tabspaces",    INTEGER, &tabspaces },
+		{ "borderpx",     INTEGER, &borderpx },
+		{ "cwscale",      FLOAT,   &cwscale },
+		{ "chscale",      FLOAT,   &chscale },
+};
+
+/*
+ * Xresources preferences to load at startup
+ * when ST_NO_XRDB_COLOR is set
+ */
+static ResourcePref resources_noxrdbcolor[] = {
+		{ "font",         STRING,  &font },
 		{ "termname",     STRING,  &termname },
 		{ "shell",        STRING,  &shell },
 		{ "minlatency",   INTEGER, &minlatency },

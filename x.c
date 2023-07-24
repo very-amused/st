@@ -8,6 +8,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <libgen.h>
+#include <stdlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <X11/cursorfont.h>
@@ -2200,8 +2201,13 @@ config_init(void)
 		return;
 
 	db = XrmGetStringDatabase(resm);
-	for (p = resources; p < resources + LEN(resources); p++)
-		resource_load(db, p->name, p->type, p->dst);
+
+	if (getenv("ST_NO_XRDB_COLOR") != NULL)
+		for (p = resources_noxrdbcolor; p < resources_noxrdbcolor + LEN(resources_noxrdbcolor); p++)
+			resource_load(db, p->name, p->type, p->dst);
+	else
+		for (p = resources; p < resources + LEN(resources); p++)
+			resource_load(db, p->name, p->type, p->dst);
 }
 
 void
