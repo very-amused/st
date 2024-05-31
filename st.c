@@ -992,7 +992,7 @@ tattrset(int attr)
 
 	for (i = 0; i < term.row-1; i++) {
 		for (j = 0; j < term.col-1; j++) {
-			if (term.line[i][j].mode & attr)
+			if (TLINE(i)[j].mode & attr)
 				return 1;
 		}
 	}
@@ -2766,9 +2766,10 @@ draw(void)
 		cx--;
 
 	drawregion(0, 0, term.col, term.row);
-	xdrawcursor(cx, term.c.y, TLINE(term.c.y)[cx],
-		term.ocx, term.ocy, TLINE(term.ocy)[term.ocx],
-		TLINE(term.ocy), term.col);
+	if (term.scr == 0)
+		xdrawcursor(cx, term.c.y, TLINE(term.c.y)[cx],
+			term.ocx, term.ocy, TLINE(term.ocy)[term.ocx],
+			TLINE(term.ocy), term.col);
 	term.ocx = cx;
 	term.ocy = term.c.y;
 	xfinishdraw();
