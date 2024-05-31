@@ -1997,15 +1997,6 @@ strhandle(void)
 				xsettitle(strescseq.args[1]);
 			return;
 		case 52:
-			if (narg > 2 && allowwindowops) {
-				dec = base64dec(strescseq.args[2]);
-				if (dec) {
-					xsetsel(dec);
-					xclipcopy();
-				} else {
-					fprintf(stderr, "erresc: invalid base64\n");
-				}
-			}
 			return;
 		case 10:
 		case 11:
