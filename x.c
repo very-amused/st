@@ -147,7 +147,7 @@ typedef struct {
 static inline ushort sixd_to_16bit(int);
 static void xresetfontsettings(ushort mode, Font **font, int *frcflags);
 static int xmakeglyphfontspecs(XftGlyphFontSpec *, const Glyph *, int, int, int);
-static void xdrawglyphfontspecs(const XftGlyphFontSpec *, Glyph, int, int, int, int);
+static void xdrawglyphfontspecs(const XftGlyphFontSpec *, Glyph, int, int, int, int, int);
 static void xdrawglyph(Glyph, int, int);
 static void xclear(int, int, int, int);
 static int xgeommasktogravity(int);
@@ -1451,7 +1451,7 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
 }
 
 void
-xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, int y, int charlen)
+xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, int y, int charlen, int dmode)
 {
 	int winx = borderpx + x * win.cw, winy = borderpx + y * win.ch,
 	    width = charlen * win.cw;
@@ -1537,51 +1537,45 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
 	if (base.mode & ATTR_INVISIBLE)
 		fg = bg;
 
-	/* Intelligent cleaning up of the borders. */
-	if (x == 0) {
-		xclear(0, (y == 0)? 0 : winy, borderpx,
-			winy + win.ch +
-			((winy + win.ch >= borderpx + win.th)? win.h : 0));
-	}
-	if (winx + width >= borderpx + win.tw) {
-		xclear(winx + width, (y == 0)? 0 : winy, win.w,
-			((winy + win.ch >= borderpx + win.th)? win.h : (winy + win.ch)));
-	}
-	if (y == 0)
-		xclear(winx, 0, winx + width, borderpx);
-	if (winy + win.ch >= borderpx + win.th)
-		xclear(winx, winy + win.ch, winx + width, win.h);
+	/* Draw background if on bg pass */
+	if (dmode & DRAW_BG) {
+		/* Intelligent cleaning up of the borders. */
+		if (x == 0) {
+			xclear(0, (y == 0)? 0 : winy, borderpx,
+				winy + win.ch +
+				((winy + win.ch >= borderpx + win.th)? win.h : 0));
+		}
+		if (winx + width >= borderpx + win.tw) {
+			xclear(winx + width, (y == 0)? 0 : winy, win.w,
+				((winy + win.ch >= borderpx + win.th)? win.h : (winy + win.ch)));
+		}
+		if (y == 0)
+			xclear(winx, 0, winx + width, borderpx);
+		if (winy + win.ch >= borderpx + win.th)
+			xclear(winx, winy + win.ch, winx + width, win.h);
 
-	/* Clean up the region we want to draw to. */
-	XftDrawRect(xw.draw, bg, winx, winy, width, win.ch);
+		/* Fill the background */
+		XftDrawRect(xw.draw, bg, winx, winy, width, win.ch);
+  }
 
-	/* Set the clip region because Xft is sometimes dirty. */
-	r.x = 0;
-	r.y = 0;
-	r.height = win.ch;
-	r.width = width;
-	XftDrawSetClipRectangles(xw.draw, winx, winy, &r, 1);
+	/* Draw fg if on fg pass */
+	if (dmode & DRAW_FG) {
+		/* Render glyph/boxchar */
+		if (base.mode & ATTR_BOXDRAW)
+			drawboxes(winx, winy, width / len, win.ch, fg, bg, specs, len);
+		else
+			XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
 
-	if (base.mode & ATTR_BOXDRAW) {
-		drawboxes(winx, winy, width / len, win.ch, fg, bg, specs, len);
-	} else {
-		/* Render the glyphs. */
-		XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
-	}
-
-	/* Render underline and strikethrough. */
-	if (base.mode & ATTR_UNDERLINE) {
-		XftDrawRect(xw.draw, fg, winx, winy + dc.font.ascent * chscale + 1,
+		/* Render underline and strikethrough */
+		if (base.mode & ATTR_UNDERLINE) {
+			XftDrawRect(xw.draw, fg, winx, winy + dc.font.ascent + 1,
 				width, 1);
-	}
-
-	if (base.mode & ATTR_STRUCK) {
-		XftDrawRect(xw.draw, fg, winx, winy + 2 * dc.font.ascent * chscale / 3,
+		}
+		if (base.mode & ATTR_STRUCK) {
+			XftDrawRect(xw.draw, fg, winx, winy + 2 * dc.font.ascent / 3,
 				width, 1);
+		}
 	}
-
-	/* Reset clip to none. */
-	XftDrawSetClip(xw.draw, 0);
 }
 
 void
@@ -1591,7 +1585,7 @@ xdrawglyph(Glyph g, int x, int y)
 	XftGlyphFontSpec *specs = xw.specbuf;
 
 	numspecs = xmakeglyphfontspecs(specs, &g, 1, x, y);
-	xdrawglyphfontspecs(specs, g, numspecs, x, y, (g.mode & ATTR_WIDE) ? 2 : 1);
+	xdrawglyphfontspecs(specs, g, numspecs, x, y, (g.mode & ATTR_WIDE) ? 2 : 1, DRAW_BG | DRAW_FG);
 }
 
 void
@@ -1737,29 +1731,37 @@ xdrawline(Line line, int x1, int y1, int x2)
 {
 	int i, x, ox, numspecs;
 	Glyph base, new;
-	XftGlyphFontSpec *specs = xw.specbuf;
+	XftGlyphFontSpec *specs;
 
-	i = ox = 0;
-	for (x = x1; x < x2; x++) {
-		new = line[x];
-		if (new.mode == ATTR_WDUMMY)
-			continue;
-		if (selected(x, y1))
-			new.mode ^= ATTR_REVERSE;
-		if ((i > 0) && ATTRCMP(base, new)) {
-			numspecs = xmakeglyphfontspecs(specs, &line[ox], x - ox, ox, y1);
-			xdrawglyphfontspecs(specs, base, numspecs, ox, y1, x - ox);
-			i = 0;
+	/* Draw line in 2 passes: background and foreground. This way wide glyphs
+		won't get truncated (#223) */
+	/* WARNING: DO NOT TOUCH! This loop was retouched manually to get wide glyph support
+	 	working with the new ligature handling in st v0.9.0+.
+		- <very-amused> */
+	for (int dmode = DRAW_BG; dmode <= DRAW_FG; dmode <<= 1) {
+		specs = xw.specbuf;
+		i = ox = 0;
+		for (x = x1; x < x2; x++) {
+			new = line[x];
+			if (new.mode == ATTR_WDUMMY)
+				continue;
+			if (selected(x, y1))
+				new.mode ^= ATTR_REVERSE;
+			if ((i > 0) && ATTRCMP(base, new)) {
+				numspecs = xmakeglyphfontspecs(specs, &line[ox], x - ox, ox, y1);
+				xdrawglyphfontspecs(specs, base, numspecs, ox, y1, x - ox, dmode);
+				i = 0;
+			}
+			if (i == 0) {
+				ox = x;
+				base = new;
+			}
+			i++;
 		}
-		if (i == 0) {
-			ox = x;
-			base = new;
+		if (i > 0) {
+			numspecs = xmakeglyphfontspecs(specs, &line[ox], x2 - ox, ox, y1);
+			xdrawglyphfontspecs(specs, base, numspecs, ox, y1, x2 - ox, dmode);
 		}
-		i++;
-	}
-	if (i > 0) {
-		numspecs = xmakeglyphfontspecs(specs, &line[ox], x2 - ox, ox, y1);
-		xdrawglyphfontspecs(specs, base, numspecs, ox, y1, x2 - ox);
 	}
 }
 
