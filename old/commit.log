@@ -1,0 +1,141 @@
+commit b07698de784fe538aaec29b9d12f70f21028889c
+Author: very-amused <very-amused@pm.me>
+Date:   Thu Apr 23 10:13:29 2020 -0400
+
+    Initial commit
+
+commit 5b7eb6bd158f6a908a30513f99fd294e875c3d70
+Author: very-amused <very-amused@pm.me>
+Date:   Thu Apr 23 10:15:44 2020 -0400
+
+    Add alpha patch
+
+commit f2a2b2319d08036fcc8a98a712df36c0424444a2
+Author: very-amused <very-amused@pm.me>
+Date:   Thu Apr 23 10:16:40 2020 -0400
+
+    Add clipboard patch
+
+commit 5613fe0b47d64f702df92050f8280b4cce682c6f
+Author: very-amused <very-amused@pm.me>
+Date:   Thu Apr 23 10:22:56 2020 -0400
+
+    Add workingdir patch
+
+commit ad2d6b38d4f7649bbcf8dbefe3b6fea2533b6615
+Author: very-amused <very-amused@pm.me>
+Date:   Thu Apr 23 10:39:05 2020 -0400
+
+    Add scrollback patch
+
+commit c21bead83d50d275197b8ac8d86158c29e3dd466
+Author: very-amused <very-amused@pm.me>
+Date:   Thu Apr 23 10:56:35 2020 -0400
+
+    Add scrollback mouse patch
+
+commit 2d931e12f77a28cfbe202ba616a4f1e8bb07b542
+Author: very-amused <very-amused@pm.me>
+Date:   Thu Apr 23 11:50:08 2020 -0400
+
+    Add mouse scroll increment patch
+
+commit 521e5b2d8c06a1dbc0954cc59daba80ab391d963
+Author: very-amused <very-amused@pm.me>
+Date:   Thu Aug 13 18:35:58 2020 -0400
+
+    Add ligature support
+
+commit bbd4685ecfaded4edc38160103b50b7d268c3eb3
+Author: very-amused <very-amused@pm.me>
+Date:   Thu Aug 13 18:38:43 2020 -0400
+
+    Change cursor shape
+
+commit e26ccef39e57fe4cf7b5ff0dacb58ffb62236c75
+Author: very-amused <very-amused@pm.me>
+Date:   Wed Mar 3 13:06:59 2021 -0500
+
+    New patchset
+
+commit 418fdbe6e81cb0546c723f8b7656e668d630609e
+Author: very-amused <very-amused@pm.me>
+Date:   Wed Mar 3 13:28:20 2021 -0500
+
+    Create diff file with all patches
+
+commit 22e8d7a4456a6951172e6bda41f42f70550f4bb1
+Author: very-amused <very-amused@pm.me>
+Date:   Sat Mar 13 17:52:05 2021 -0500
+
+    Add Xresources patch
+
+commit 2b7c6533b44a40f4ce92a0c666e7a07b5218a2d4
+Author: very-amused <very-amused@pm.me>
+Date:   Sat Mar 13 18:07:14 2021 -0500
+
+    Don't let Xresources dictate fg/bg
+
+commit c0f90107f1d6ddc20b58bd48632ccfc4fa326e57
+Author: very-amused <very-amused@pm.me>
+Date:   Tue Apr 5 10:20:55 2022 -0400
+
+    Add font2 patch
+
+commit 980a0ff9cd5032a838a119343ef619241731b7a3
+Author: very-amused <very-amused@pm.me>
+Date:   Sat Jun 18 15:19:15 2022 -0400
+
+    Remove patch side effect files
+
+commit ed1ddc1c14dc0194f5811a2a5b97e0465656ee19
+Author: very-amused <very-amused@pm.me>
+Date:   Thu Jun 8 16:11:57 2023 -0400
+
+    Switch to Fira Code Nerd Font Mono
+
+commit 7a47e92fb2d3f4852639b13abee6a827c120053f
+Author: very-amused <very-amused@pm.me>
+Date:   Sun Jun 18 07:34:39 2023 -0400
+
+    Change termname to xterm-256color
+
+commit 7b54e808faf1d8ee7e4023348535729568f5106f
+Author: very-amused <very-amused@pm.me>
+Date:   Thu Jun 29 16:11:47 2023 -0400
+
+    Fix wide glyph rendering (no more cutoff icons)
+
+commit 287ffc15efd1c75bac2e520074fe8590247306dc
+Author: very-amused <very-amused@pm.me>
+Date:   Sun Jul 23 23:52:05 2023 -0400
+
+    Add ST_NO_XRDB_COLOR env option
+
+commit fa50b717204eb01ef55f787ac09dc3987979885f
+Author: very-amused <very-amused@pm.me>
+Date:   Fri Aug 25 17:49:01 2023 -0400
+
+    Remove outdated multipatch
+
+commit 67c556485502f48ddb4ca0e91c113a49759e7fbb
+Author: very-amused <very-amused@pm.me>
+Date:   Fri May 3 16:43:02 2024 -0400
+
+    Change default font size
+    
+    I honestly should've made this change months ago when I switched to a 38" 4k
+    monitor as my primary. 12pt at this screen size and DPI was a massive underuse of
+    real-estate no matter how you cut it
+
+commit 3fc38036ee8ba4774bedd9b27cd616241d6c56ee
+Author: very-amused <very-amused@pm.me>
+Date:   Wed May 22 16:59:41 2024 -0400
+
+    Resize in increments of +-2
+
+commit bdf056c807e87633bb1b2e79321705fba7a0b2ee
+Author: very-amused <very-amused@pm.me>
+Date:   Thu May 30 18:04:10 2024 -0400
+
+    Move everything from 0.8.4 into old/

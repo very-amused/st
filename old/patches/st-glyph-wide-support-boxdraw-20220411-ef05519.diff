@@ -103,7 +103,6 @@ index bf6bbf9..1311c0d 100644
 +
 +
 +    if (dmode & DRAW_FG) {
-
 +		if (base.mode & ATTR_BOXDRAW) {
 +			drawboxes(winx, winy, width / len, win.ch, fg, bg, specs, len);
 +		} else {
@@ -133,7 +132,6 @@ index bf6bbf9..1311c0d 100644
 +            XftDrawRect(xw.draw, fg, winx, winy + 2 * dc.font.ascent / 3,
 +                        width, 1);
 +        }
-
 +    }
  }
  
