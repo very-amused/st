@@ -1,13 +1,23 @@
 // vi: ft=c
 /* See LICENSE file for copyright and license details. */
 
+/* Configure options for laptop usage (slightly bigger font) */
+#if 0
+#define LAPTOP
+#endif
+
 /*
  * appearance
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
+#ifdef LAPTOP
 static char *font = "Fira Code Nerd Font:size=10:antialias=true:autohint=true";
 static int borderpx = 10;
+#else
+static char *font = "Fira Code Nerd Font:size=9:antialias=true:autohint=true";
+static int borderpx = 9;
+#endif
 
 /*
  * What program is execed by st depends of these precedence rules:
